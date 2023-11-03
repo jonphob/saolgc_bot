@@ -50,24 +50,24 @@ async def main(comp_id, tee_time):
     await pin.type('2322')
     await page.keyboard.press('Enter')
 
-
     await page.goto(f'https://www.stannesoldlinks.com/competition2.php?tab=details&compid={comp_id}')
     signUp_btn = await wait_for_element_reload(page, '.comp-signup-button')
     await signUp_btn.click()
-    btn = await page.waitForXPath('//*[@id="onlineSignupContainer"]/div[3]/a[1]')
-    await btn.click()
-    await page.waitFor(500)
+    # btn = await page.waitForXPath('//*[@id="onlineSignupContainer"]/div[3]/a[1]')
+    # await page.waitFor(2000)
+    # await btn.click()
+    await page.waitFor(2000)
 
     tds = await page.querySelectorAll('td')
     for td in tds:
         text_handle = await td.getProperty('textContent')
         text = await text_handle.jsonValue()
+        print(text)
         if text == f'{tee_time}':
             nextElementSibling = await td.getProperty('nextElementSibling')
-            await nextElementSibling.click()
-            nextEl_handle = await nextElementSibling.getProperty('textContent')
-            nextEl_text = await nextEl_handle.jsonValue()
-            print(nextEl_text)
+            link = await nextElementSibling.querySelector('a')
+            await link.click()
+
             break
         else:
             print('not found')
