@@ -1,12 +1,27 @@
 import asyncio
-from pyppeteer import launch
 from datetime import datetime, timedelta
+import os
+import logging
+
+from pyppeteer import launch
+from dotenv import load_dotenv
+
+
+load_dotenv()
+
+USERNAME = os.getenv("USER")
+PIN = os.getenv("PIN")
+
+if not USERNAME or not PIN:
+    raise ValueError("Environment variables USER and PIN must be set")
+
+logging.basicConfig(level=logging.INFO)
 
 
 async def wait_for_element_reload(page, element: str):
     """Waits for element to appear.
     Args:
-        page: the page which element will appear
+        page: the page in which element will appear
         element: class for the element being looked for
     Returns:
         The element
