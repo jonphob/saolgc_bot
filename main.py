@@ -102,8 +102,5 @@ tee_time = input("What is the earliest tee time? (hh:mm) ")
 while not re.match(r"^([01]\d|2[0-3]):([0-5]\d)$", tee_time):
     print("Invalid time format. Please enter time in 'hh:mm' format.")
     tee_time = input("What is the earliest tee time? (hh:mm) ")
-print("time list")
-times_list = generate_incrementing_times(tee_time)
-print(times_list)
 
 asyncio.get_event_loop().run_until_complete(main(competition_id, tee_time))
