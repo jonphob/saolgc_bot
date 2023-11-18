@@ -75,7 +75,9 @@ async def main(comp_id, tee_time):
             nextElementSibling = await td.getProperty("nextElementSibling")
             link = await nextElementSibling.querySelector("a")
             await link.click()
-
+            print(
+                "Tee time selected, now please login, navigate to competition and add playing partners"
+            )
             break
         else:
             print("not found")
