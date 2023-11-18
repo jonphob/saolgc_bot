@@ -1,6 +1,5 @@
 import asyncio
 import re
-from datetime import datetime, timedelta
 import os
 import logging
 
@@ -36,6 +35,16 @@ async def wait_for_element_reload(page, element: str):
 
 
 async def main(comp_id, tee_time):
+    """
+    This function automates the process of signing up for a golf competition on the St. Annes Old Links website.
+
+    Parameters:
+    comp_id (str): The ID of the competition.
+    tee_time (str): The desired tee time for signing up.
+
+    Returns:
+    None
+    """
     browser = await launch({"headless": False})
     page = await browser.newPage()
     await page.goto("https://www.stannesoldlinks.com/login.php")
@@ -54,9 +63,7 @@ async def main(comp_id, tee_time):
     )
     signUp_btn = await wait_for_element_reload(page, ".comp-signup-button")
     await signUp_btn.click()
-    # btn = await page.waitForXPath('//*[@id="onlineSignupContainer"]/div[3]/a[1]')
-    # await page.waitFor(2000)
-    # await btn.click()
+
     await page.waitFor(2000)
 
     tds = await page.querySelectorAll("td")
