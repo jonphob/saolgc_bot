@@ -49,59 +49,51 @@ def generate_incrementing_times(start_time: str):
     return times
 
 
-async def main(compid, teetime):
-    """
-    This function logs in to the website
-    https://www.stannesoldlinks.com/login.php, navigates to a
-    specific competition page,
-    finds a tee time and clicks on the corresponding link.
+async def main(comp_id, tee_time):
+    browser = await launch({"headless": False})
+    page = await browser.newPage()
+    await page.goto("https://www.stannesoldlinks.com/login.php")
 
-    Args:
-    comp_id (str): The ID of the competition.
-    tee_time (str): The tee time to be found.
+    # find and enter username
+    username = await page.querySelector("#memberid")
+    await username.type("1953")
 
-    Returns:
-    None
-    """
-    try:
-        browser = await launch({"headless": False})
-        page = await browser.newPage()
-        await page.goto("https://www.stannesoldlinks.com/login.php")
+    # find and enter pin number
+    pin = await page.querySelector("#pin")
+    await pin.type("2322")
+    await page.keyboard.press("Enter")
 
-        # find and enter username
-        username = await page.querySelector("#memberid")
-        await username.type(USERNAME)
+    await page.goto(
+        f"https://www.stannesoldlinks.com/competition2.php?tab=details&compid={comp_id}"
+    )
+    signUp_btn = await wait_for_element_reload(page, ".comp-signup-button")
+    await signUp_btn.click()
+    # btn = await page.waitForXPath('//*[@id="onlineSignupContainer"]/div[3]/a[1]')
+    # await page.waitFor(2000)
+    # await btn.click()
+    await page.waitFor(2000)
 
-        # find and enter pin number
-        pin = await page.querySelector("#pin")
-        await pin.type(PIN)
-        await page.keyboard.press("Enter")
+    tds = await page.querySelectorAll("td")
+    for td in tds:
+        text_handle = await td.getProperty("textContent")
+        text = await text_handle.jsonValue()
+        print(text)
+        if text == f"{tee_time}":
+            nextElementSibling = await td.getProperty("nextElementSibling")
+            link = await nextElementSibling.querySelector("a")
+            await link.click()
 
-        await page.goto(
-            f"https://www.stannesoldlinks.com/competition2.php?tab=details&compid={compid}"
-        )
-        signup_btn = await wait_for_element_reload(page, ".comp-signup-button")
-        await signup_btn.click()
-        await page.waitFor(2000)
+            break
+        else:
+            print("not found")
 
-        tds = await page.querySelectorAll("td")
-        for td in tds:
-            text_handle = await td.getProperty("textContent")
-            text = await text_handle.jsonValue()
-            logging.info("Text: %s", text)
-            if text == f"{teetime}":
-                next_element_sibling = await td.getProperty("nextElementSibling")
-                link = await next_element_sibling.querySelector("a")
-                await link.click()
-                break
-
-            logging.info("Tee time not found")
-
-        await page.waitForNavigation()
-    except Exception as e:
-        logging.error("An error occurred: %s", e)
+    await page.waitForNavigation()
 
 
 competition_id = input("What is the competition ID? ")
 tee_time = input("What is the earliest tee time? (hh:mm) ")
+print("time list")
+times_list = generate_incrementing_times(tee_time)
+print(times_list)
+
 asyncio.get_event_loop().run_until_complete(main(competition_id, tee_time))
