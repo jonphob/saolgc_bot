@@ -56,11 +56,11 @@ async def main(comp_id, tee_time):
 
     # find and enter username
     username = await page.querySelector("#memberid")
-    await username.type("1953")
+    await username.type(USERNAME)
 
     # find and enter pin number
     pin = await page.querySelector("#pin")
-    await pin.type("2322")
+    await pin.type(PIN)
     await page.keyboard.press("Enter")
 
     await page.goto(
