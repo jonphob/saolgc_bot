@@ -58,13 +58,16 @@ async def main(comp_id, tee_time):
     await pin.type(PIN)
     await page.keyboard.press("Enter")
 
+    # Navigate to competition page
     await page.goto(
         f"https://www.stannesoldlinks.com/competition2.php?tab=details&compid={comp_id}"
     )
     signUp_btn = await wait_for_element_reload(page, ".comp-signup-button")
+    print("Sign up button found")
     await signUp_btn.click()
+    print("Sign up button clicked")
 
-    await page.waitFor(2000)
+    await page.waitFor(1000)
 
     tds = await page.querySelectorAll("td")
     for td in tds:
