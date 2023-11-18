@@ -6,7 +6,6 @@ import logging
 from pyppeteer import launch
 from dotenv import load_dotenv
 
-
 load_dotenv()
 
 USERNAME = os.getenv("USER")
@@ -39,7 +38,6 @@ def generate_incrementing_times(start_time: str):
     """Generates a list of incrementing times.
     Args:
     start_time: The start time.
-    increment: The increment in minutes.
     Returns:
     A list of incrementing times.
     """
@@ -106,8 +104,4 @@ async def main(compid, teetime):
 
 competition_id = input("What is the competition ID? ")
 tee_time = input("What is the earliest tee time? (hh:mm) ")
-print("time list")
-times_list = generate_incrementing_times(tee_time)
-print(times_list)
-
 asyncio.get_event_loop().run_until_complete(main(competition_id, tee_time))
