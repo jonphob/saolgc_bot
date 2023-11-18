@@ -1,4 +1,5 @@
 import asyncio
+import re
 from datetime import datetime, timedelta
 import os
 import logging
@@ -91,7 +92,16 @@ async def main(comp_id, tee_time):
 
 
 competition_id = input("What is the competition ID? ")
+
+while not re.match(r"^\d{5}$", competition_id):
+    print("Invalid input. The competition ID should be exactly 5 digits.")
+    competition_id = input("What is the competition ID? ")
+
 tee_time = input("What is the earliest tee time? (hh:mm) ")
+
+while not re.match(r"^([01]\d|2[0-3]):([0-5]\d)$", tee_time):
+    print("Invalid time format. Please enter time in 'hh:mm' format.")
+    tee_time = input("What is the earliest tee time? (hh:mm) ")
 print("time list")
 times_list = generate_incrementing_times(tee_time)
 print(times_list)
