@@ -35,21 +35,6 @@ async def wait_for_element_reload(page, element: str):
     return button
 
 
-def generate_incrementing_times(start_time: str):
-    """Generates a list of incrementing times.
-    Args:
-    start_time: The start time.
-    Returns:
-    A list of incrementing times.
-    """
-    times = []
-    current_time = datetime.strptime(start_time, "%H:%M")
-    while len(times) < 7:
-        times.append(current_time.strftime("%H:%M"))
-        current_time += timedelta(minutes=10)
-    return times
-
-
 async def main(comp_id, tee_time):
     browser = await launch({"headless": False})
     page = await browser.newPage()
