@@ -73,7 +73,6 @@ async def main(comp_id, tee_time):
     for td in tds:
         text_handle = await td.getProperty("textContent")
         text = await text_handle.jsonValue()
-        print(text)
         if text == f"{tee_time}":
             nextElementSibling = await td.getProperty("nextElementSibling")
             link = await nextElementSibling.querySelector("a")
